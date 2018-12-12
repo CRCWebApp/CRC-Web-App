@@ -42,11 +42,7 @@ a{
     text-align: center;
 }
 
-.width-buttons{
-    padding: 50px;
-    width:30%;
-    margin-left: 30%;
-}
+
 
 .welcome-message{
     
@@ -55,6 +51,9 @@ a{
     font-family: 'Concert One', cursive;
     text-align: center;
 
+}
+#invertis-logo {
+    width:65%;
 }
 body {
     margin:0px;
