@@ -1,20 +1,46 @@
 <br/>
 <div class="row">
-  <div class="col-lg-6>
+  <div class="col-lg-6">
     <div class="welcome-message">
-      <h4 style="color: white; margin-top: 35px;">Welcome {{ Uname }}!</h4>
+      <h4 style="color: white;">Welcome {{ Uname }}!</h4>
     </div>
   </div>
-  <div class="col-lg-6>
-     
+</div>
+ 
+<div class="row">
+  <div class="col-lg-6 col-lg-offset-3 well">
+  <h2 class="welcome-message" style="color: #000;">Message Board:</h2> 
+  <marquee direction="up" height="195">
+  {{#each notices}}
+  <div class="notice-block">
+    <div class="notice-title">
+      <b>{{title}}</b>
+    </div>
+
+            <div class="notice-description">
+              {{description}}
+            </div>
+          </div>
+          <hr/>
+          {{/each}}
+          </marquee>
+  </div>       
+</div>
+
+        
+         
+        
+        </div>
   </div> 
-</div>   
+   
 
 <hr/>
- 
 
+
+ 
+<div class="container-fluid">
 <div class="well"> 
-<div class="table-responsive well">
+<div class="table-responsive">
 <table class="table">
    <thead>
     <tr>

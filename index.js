@@ -131,10 +131,14 @@ app.get('/profile', (req,res) => {					//GET /profile will be rendered with prof
 		else{
 			let email = req.session.email;
 			Student.find({email:email}).then((student) => {
+				Notice.find().then((notices) => {
 			res.render('profile',{
 			layout:'layout.hbs',
 			Uname: email,
-			student
+			student,
+			notices
+
+			})
 			});
 		}, () => {
 			console.log('Error',e);
