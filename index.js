@@ -291,16 +291,20 @@ app.post('/postJob', (req,res) => {
 		comp_name, placement_type, location, venue, date, time, eligibility, comp_key
 	});
 
-	job.save().then((job) => {
-		jd.mv(__dirname+`/docs/jd/jd_${comp_key}.doc`, function(err) {
+	jd.mv(__dirname+`/docs/jd/jd_${comp_key}.doc`, function(err) {
     	if (err)
       		return res.status(500).send(err);
-      	console.log('JD uploaded!');
-  		});
-		res.redirect('/dashboard');
-	}).catch((e) => {
-		console.log('Error'+e);
-	});
+      	
+      	job.save().then((job) => {
+      		res.redirect('/dashboard');
+		})
+		.catch((e) => {
+			console.log('Error'+e);
+		});
+
+  	});
+
+	
 
 });
 
