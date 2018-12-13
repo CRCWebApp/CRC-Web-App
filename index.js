@@ -270,7 +270,14 @@ app.post('/addNotice', (req,res) => {
 
 
 app.get('/postJob', (req,res) => {
-	res.render('job.hbs');
+
+	if(typeof req.session.email === 'undefined'){	
+		res.redirect('/login');
+	}
+	else{
+		res.render('job.hbs');
+	}
+
 });
 
 app.post('/postJob', (req,res) => {
@@ -310,12 +317,17 @@ app.post('/postJob', (req,res) => {
 
 
 app.get('/getJobs', (req,res) => {
-	Job.find({}).then((jobs) => {
-		res.render('viewJobs', {jobs});
-	}).catch((e) => {
-		console.log(e);
-	});
-	
+
+	if(typeof req.session.email === 'undefined'){	
+		res.redirect('/login');
+	}
+	else{
+		Job.find({}).then((jobs) => {
+			res.render('viewJobs', {jobs});
+		}).catch((e) => {
+			console.log(e);
+		});
+	}
 });
 
 app.get('/addStudent',(req,res) => {
@@ -451,27 +463,44 @@ app.post('/exportFile', (req,res,next) => {
 	
 });
 
-app.get('/modal', (req,resume) => {
+/*app.get('/modal', (req,resume) => {
 	res.render('modal');
-});
+});*/
 
 app.get('/exportFile', (req,res) => {
-	let file = __dirname+'/studentsRecord.xls';
-	res.download(file);
+
+	if(typeof req.session.email === 'undefined'){	
+		res.redirect('/login');
+	}
+	else{
+		let file = __dirname+'/studentsRecord.xls';
+		res.download(file);
+	}
+	
 });
 
 app.get('/logout', AuthController.logout);
 
 
 app.get('/downloadCV/:id', (req,res) => {
-	res.download(__dirname+`/docs/cv_${req.params.id}.doc`);
-	
+	if(typeof req.session.email === 'undefined'){	
+		res.redirect('/login');
+	}
+	else{
+		res.download(__dirname+`/docs/cv_${req.params.id}.doc`);
+	}
 }, (req,res) => {
 	res.redirect('/dashboard');
 });
 
 app.get('/downloadJD/:id', (req,res) => {
-	res.download(__dirname+`/docs/jd/jd_${req.params.id}.doc`);
+
+	if(typeof req.session.email === 'undefined'){	
+		res.redirect('/login');
+	}
+	else{
+		res.download(__dirname+`/docs/jd/jd_${req.params.id}.doc`);
+	}
 	
 }, (req,res) => {
 	res.redirect('/dashboard');
