@@ -287,7 +287,7 @@ app.post('/postJob', (req,res) => {
 	let comp_key = comp_name.split(' ');
 	comp_key = comp_key[0];
 
-	jd.mv(__dirname+`/app/docs/jd/jd_${comp_key}.doc`, function(err) {
+	jd.mv(__dirname+`/docs/jd/jd_${comp_key}.doc`, function(err) {
     if (err)
       	return res.status(500).send(err);
       console.log('JD uploaded!');
