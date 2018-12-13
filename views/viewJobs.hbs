@@ -1,0 +1,47 @@
+<br/>
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+<div class="well">
+{{#if jobs}}
+<div class="table-responsive">
+<table class="table" id="mytable">
+  <thead>
+    <tr>
+      <th scope="col">S.No.</th>
+      <th scope="col">Company Name</th>
+      <th scope="col">Location</th>
+      <th scope="col">Venue</th>
+      <th scope="col">Date</th>
+      <th scope="col">Time</th>
+      <th scope="col">Eligibility</th>
+      <th scope="col">Job Description</th>
+     
+    </tr>  
+  </thead>
+  <div id="div1">
+  <tbody id="tbody" name="tbody">
+ 
+  	{{#each jobs}}
+  		<tr>
+    	  <td>{{inc @index}}</td>
+        <td>{{comp_name}}</td>
+        <td>{{location}}</td>
+    		<td>{{venue}}</td>
+    		<td>{{date}}</td>
+        <td>{{time}}</td>
+        <td>{{eligibility}}</td>
+        <td><a href="/downloadJD/{{comp_key}}"><input type="button" class="btn btn-success" value="View"></a></td>
+  		</tr>
+  	{{/each}}
+  {{else}}
+  <td>No jobs to display!</td>
+  {{/if}}	
+  </tbody>
+  </div>	
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>

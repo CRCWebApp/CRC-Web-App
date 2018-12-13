@@ -76,14 +76,16 @@
 
           <hr/>
           <marquee direction="up" height="195">
-          {{#each notices}}
+          {{#each jobs}}
           <div class="notice-block">
             <div class="notice-title">
-              <b>{{title}}</b>
+              <b>{{placement_type}}</b> -  <b>{{comp_name}}</b> 
             </div>
-
+              <div class="notice-description">
+              <b>Date:</b>{{date}} <b>Time:</b>{{time}} <b>Venue:</b>{{venue}}
+            </div>
             <div class="notice-description">
-              {{description}}
+              <b>Eligibility:</b> - {{eligibility}}
             </div>
           </div>
           <hr/>

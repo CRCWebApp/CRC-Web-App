@@ -12,6 +12,7 @@ const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 var {mongoose} = require('./db/mongoose');
 var {Student} = require('./models/studentModel');
+var {Job} = require('./models/jobModel');
 var {Admin} = require('./models/adminModel');
 var {Notice} = require('./models/noticeModel');
 const hbs = require('express-handlebars');
@@ -131,12 +132,12 @@ app.get('/profile', (req,res) => {					//GET /profile will be rendered with prof
 		else{
 			let email = req.session.email;
 			Student.find({email:email}).then((student) => {
-				Notice.find().then((notices) => {
+				Job.find().then((jobs) => {
 			res.render('profile',{
 			layout:'layout.hbs',
 			Uname: email,
 			student,
-			notices
+			jobs
 
 			})
 			});
@@ -158,10 +159,10 @@ app.get('/dashboard', (req,res) => {
 		}
 		else{
 				Student.find().then((students) => {
-					Notice.find().then((notices) => {
+					Job.find().then((jobs) => {
 						res.render('dashboard',{
 							students,
-							notices
+							jobs
 					})	
 				
 			});
@@ -218,31 +219,25 @@ app.get('/addNotice', (req,res) => {
 	}
 });
 
-app.post('/addNotice', (req,res,next) => {
+app.post('/addNotice', (req,res) => {
 	let title = req.body.title;
 	let description = req.body.desc;
-	let due_date = req.body.due_date;
-	let receiver = req.body.target;
 	req.title = title;
 	req.description = description;
 
-	req.date = due_date;
-
 	var notice = new Notice({
 		sender:'CRC',
-		receiver:'Students',
 		title,
-		description,
-		due_date
+		description
 	});
 
 	notice.save().then((notice) =>{
-		next();
+		res.redirect('dashboard');
 	}).catch((e) => {
 		console.log(e);
 	});
 
-}, (req,res,next) => {	
+} /*(req,res,next) => {	
 	var studentsEmails = [];
 	Student.find({}).then((students) => {
 			students.forEach((student) => studentsEmails.push(student.email));
@@ -270,7 +265,55 @@ app.post('/addNotice', (req,res,next) => {
 			console.log(e);
 		});
 
-		res.redirect('dashboard');
+		
+}*/);
+
+
+app.get('/postJob', (req,res) => {
+	res.render('job.hbs');
+});
+
+app.post('/postJob', (req,res) => {
+
+	let comp_name = req.body.comp_name;
+	let placement_type = req.body.placement_type;
+	let location = req.body.location;
+	let venue = req.body.venue;
+	let date = req.body.date;
+	let time = req.body.time;
+	let eligibility = req.body.eligibility;
+	let jd = req.files.jd;
+
+	let comp_key = comp_name.split(' ');
+	comp_key = comp_key[0];
+
+	jd.mv(__dirname+`/docs/jd/jd_${comp_key}.doc`, function(err) {
+    	if (err)
+      		return res.status(500).send(err);
+      	console.log('JD uploaded!');
+  	});
+
+
+	var job = new Job({
+		comp_name, placement_type, location, venue, date, time, eligibility, comp_key
+	});
+
+	job.save().then((job) => {
+		res.redirect('/dashboard');
+	}).catch((e) => {
+		console.log('Error'+e);
+	});
+
+});
+
+
+app.get('/getJobs', (req,res) => {
+	Job.find({}).then((jobs) => {
+		res.render('viewJobs', {jobs});
+	}).catch((e) => {
+		console.log(e);
+	});
+	
 });
 
 app.get('/addStudent',(req,res) => {
@@ -280,7 +323,7 @@ app.get('/addStudent',(req,res) => {
 	else {
 
 		if(req.session.email === 'v@gmail.com') 
-				res.render('registration.hbs');
+			res.render('registration.hbs');
 		
 		else 
 			res.render('profile.hbs');
@@ -420,6 +463,13 @@ app.get('/logout', AuthController.logout);
 
 app.get('/downloadCV/:id', (req,res) => {
 	res.download(__dirname+`/docs/cv_${req.params.id}.doc`);
+	
+}, (req,res) => {
+	res.redirect('/dashboard');
+});
+
+app.get('/downloadJD/:id', (req,res) => {
+	res.download(__dirname+`/docs/jd/jd_${req.params.id}.doc`);
 	
 }, (req,res) => {
 	res.redirect('/dashboard');

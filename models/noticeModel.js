@@ -6,12 +6,6 @@ var NoticeSchema = new mongoose.Schema({
 		trim:true,
 		minLength:1
 	},
-	receiver:{
-		type:String,
-		required:true,
-		trim:true,
-		minLength:1,
-	},
 	title:{
 		type:String,
 		required: true,
@@ -23,12 +17,6 @@ var NoticeSchema = new mongoose.Schema({
 		required: true,
 		minLength: 1,
 		trim: true
-	},
-	due_date:{
-		type:Date,
-		required:true,
-		trim:true,
-		minLength:1,
 	},
 	date_of_creation:{
 		type:Date,
