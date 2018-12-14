@@ -4,21 +4,21 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const app = express();
-var flash = require('connect-flash');
 const PORT = process.env.PORT || 3000;
 const path = require('path');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
-var {mongoose} = require('./db/mongoose');
-var {Student} = require('./models/studentModel');
-var {Job} = require('./models/jobModel');
-var {Admin} = require('./models/adminModel');
-var {Notice} = require('./models/noticeModel');
+const {mongoose} = require('./db/mongoose');
+const {Student} = require('./models/studentModel');
+const {Job} = require('./models/jobModel');
+const {Admin} = require('./models/adminModel');
+const {Notice} = require('./models/noticeModel');
 const hbs = require('express-handlebars');
 const util = require('util');
 const writeFile = util.promisify(fs.writeFile);
 const fileUpload = require('express-fileupload');
+
 
 const AuthController = require('./controllers/AuthController');
 
@@ -34,7 +34,6 @@ app.use(session({
 	resave: true,
     saveUninitialized: true
 	}));
-app.use(flash());
 app.engine( 'hbs', hbs( { 
   extname: 'hbs', 
   defaultLayout: __dirname + '/views/layouts/layout.hbs', 
@@ -61,9 +60,22 @@ app.use(function(req, res, next) {
 
 
 app.get('/', (req,res) => {
+
+	if(typeof req.session.email !== "undefined"){
+		if(app.locals.type === 'Student'){
+			res.redirect('/profile');
+		}
+		else{
+			res.redirect('/dashboard');
+		}
+	}
+	
+	else{
 	res.render('index',{
 		pageTitle:'Welcome to CRC, Invertis University'
 	});
+ }
+	
 });
 
 
@@ -96,11 +108,9 @@ app.post('/login', (req,res) => {	//POST /login handler to redirect the request 
 			app.locals.session = req.session;
 			global.utype = Type;
 			app.locals.type = Type;
-			req.flash('info', 'Flash is back!')
 			res.redirect('/profile');
 		}).catch((e) => {
-			res.redirect('login',);
-			res.status(401).send();
+			res.render('login', {error: 'Wrong Student Credentials!! Try login again'});
 		});
 	}).catch((e) => 
 		Admin.find({email}).then((admin) => {
@@ -113,10 +123,12 @@ app.post('/login', (req,res) => {	//POST /login handler to redirect the request 
 				app.locals.type = Type;
 				res.redirect('/dashboard');
 			}).catch((e) => {
-				res.status(401).send();
+			res.render('login', {error: 'Wrong Admin Credentials!! Try login again'});	
 		});
 	})
-	.catch((e) => console.log('Error', e))
+	.catch((e) => {
+			res.render('login', {error: 'Something went wrong!! Try login again'});	
+		})
 	);
 					
 });
@@ -134,6 +146,7 @@ app.get('/profile', (req,res) => {					//GET /profile will be rendered with prof
 			Student.find({email:email}).then((student) => {
 				Job.find().then((jobs) => {
 			res.render('profile',{
+			pageTitle:'Student Profile',	
 			layout:'layout.hbs',
 			Uname: email,
 			student,
@@ -161,6 +174,7 @@ app.get('/dashboard', (req,res) => {
 				Student.find().then((students) => {
 					Job.find().then((jobs) => {
 						res.render('dashboard',{
+							pageTitle:'Admin Dashboard',
 							students,
 							jobs
 					})	
@@ -200,7 +214,8 @@ app.get('/notices', (req,res) => {
 	}else{
 		Notice.find({}).then((notices) => {
 			res.render('notices',{
-				title:'Not8ices',
+				pageTitle:'Noties',
+				title:'Notices',
 				notices
 			});
 		}).catch(
@@ -215,7 +230,7 @@ app.get('/addNotice', (req,res) => {
 		res.redirect('/login');
 	}
 	else{
-		res.render('add_notice.hbs');
+		res.render('add_notice', {pageTitle:'Add Notice'});
 	}
 });
 
@@ -275,7 +290,7 @@ app.get('/postJob', (req,res) => {
 		res.redirect('/login');
 	}
 	else{
-		res.render('job.hbs');
+		res.render('job', {pageTitle:'Post Job'});
 	}
 
 });
@@ -307,7 +322,6 @@ app.post('/postJob', (req,res) => {
 
 
 	job.save().then((job) => {
-		
 		res.redirect('/dashboard');
 	}).catch((e) => {
 		console.log('Error'+e);
@@ -323,7 +337,7 @@ app.get('/getJobs', (req,res) => {
 	}
 	else{
 		Job.find({}).then((jobs) => {
-			res.render('viewJobs', {jobs});
+			res.render('viewJobs', {pageTitle:'Get Jobs',jobs});
 		}).catch((e) => {
 			console.log(e);
 		});
@@ -337,10 +351,10 @@ app.get('/addStudent',(req,res) => {
 	else {
 
 		if(req.session.email === 'v@gmail.com') 
-			res.render('registration.hbs');
+			res.render('registration', {pageTitle:'Student Registration'});
 		
 		else 
-			res.render('profile.hbs');
+			res.render('profile');
 		
 	}
 });
