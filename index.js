@@ -328,7 +328,14 @@ app.post('/postJob', (req,res) => {
 	});
 
 });
-
+app.get('/changePassword', (req,res) => {
+	if(typeof req.session.email === 'undefined'){
+		res.redirect('/login');
+	}
+	else{
+		res.render('changePassword');
+	}
+});
 
 app.get('/getJobs', (req,res) => {
 
