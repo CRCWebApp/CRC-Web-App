@@ -328,14 +328,45 @@ app.post('/postJob', (req,res) => {
 	});
 
 });
-app.get('/changePassword', (req,res) => {
-	if(typeof req.session.email === 'undefined'){
-		res.redirect('/login');
-	}
-	else{
-		res.render('changePassword');
-	}
-});
+//app.get('/changePassword', (req,res) => {
+//	if(typeof req.session.email === 'undefined'){
+//		res.redirect('/login');
+//	}
+//	else{
+//		res.render('changePassword');
+//	}
+//});
+
+//app.post('/changePassword', (req,res) => {
+//	let email = req.session.email;
+//	let error = 'No error';
+//	let curr_pass = req.body.curr_pass;
+//	let new_pass = req.body.new_pass;
+//	let conf_pass = req.body.conf_pass;
+//	
+//	Student.find({email}).then((student) => {
+//		Student.checkValidPasswords(curr_pass, student[0].password).then(() => {
+//			console.log('fetched pswd - '+student[0].password);
+//			if(new_pass === conf_pass){
+//				console.log('Checking new and confirm passwd');
+//			
+//					Student.updatePassword(new_pass);
+//					console.log('password changed!!');
+//					res.redirect('/profile');
+//				}
+//			else{
+//				console.log('Error in update');
+//			}
+//
+//		})
+//		.catch(() => {
+//			console.log('No match!');
+//		})
+//	}).catch(() => {
+//		res.render('changePassword',{error:'Incorrect current password!'});
+//	})
+//
+//});
 
 app.get('/getJobs', (req,res) => {
 
@@ -428,12 +459,12 @@ app.post('/registration', (req,res,next) => {
 
 
 	newStudent.save().then((student) => {
-		console.log('saving!!');
+		console.log('saved!!  '+student);
 		res.redirect('/dashboard'); 
 	}).catch((e) => {
 		console.log('Error in saving!!'+e);
 	});
-}, (req,res,next) => {
+} /*(req,res,next) => {
 	var transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
@@ -462,8 +493,8 @@ app.post('/registration', (req,res,next) => {
 	  		console.log(error);
 		}
 		res.redirect('/dashboard');		
-	});
-});  
+	});*/
+);  
 
 app.post('/exportFile', (req,res,next) => {
 	var students = req.body.fetchedData
@@ -525,6 +556,18 @@ app.get('/downloadJD/:id', (req,res) => {
 	
 }, (req,res) => {
 	res.redirect('/dashboard');
+});
+
+app.post('/updateDP', (req,res) => {
+	
+	let dp = req.files.dp;
+	dp.mv(__dirname+`/public/images/dp/dp_${req.session.email}.jpg`, function(err) {
+	if (err)
+		return res.status(500).send(err);
+	console.log('DP updated!');
+	res.redirect('/profile');
+	});
+
 });
 
 app.listen(PORT, () => {

@@ -1,14 +1,40 @@
 <br/>
-<div class="row">
-  <div class="col-lg-6">
-    <div class="welcome-message">
-      <h4 style="color: white;">Welcome {{ Uname }}!</h4>
-    </div>
-  </div>
-</div>
+
  
 <div class="row">
-  <div class="col-lg-6 col-lg-offset-3 well">
+  <div class="col-lg-6">
+    <div class="well">
+    <div class="welcome-message">
+      <h4 style="color: #000;">Hey! {{ Uname }}!</h4>
+    </div>
+    <div>
+        <form action="/updateDP" method="post" enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-lg-1 col-lg-offset-5">
+               <input type="file" name="dp" id="dp">         
+            </div>
+          </div>
+         
+           <div class="row">
+            <div class="col-lg-1 col-lg-offset-5">
+              <img src="images/dp/dp_{{ Uname }}.jpg" width="130" height="170">         
+            </div>
+          </div>
+       
+          <div class="row">
+            <div class="col-lg-2 col-lg-offset-5">
+            <input type="submit" class="btn btn-success" value="Update">
+          </div>
+          </div>
+
+        </form>
+        
+    </div>
+    </div>
+  </div>
+ 
+  <div class="col-lg-6">
+    <div class="well">
   <h2 class="welcome-message" style="color: #000;">Message Board:</h2> 
   <marquee direction="up" height="195">
           {{#each jobs}}
@@ -27,6 +53,7 @@
           <hr/>
           {{/each}}
           </marquee>
+  </div>
   </div>       
 </div>
 
