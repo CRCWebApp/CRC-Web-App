@@ -18,7 +18,9 @@ const hbs = require('express-handlebars');
 const util = require('util');
 const writeFile = util.promisify(fs.writeFile);
 const fileUpload = require('express-fileupload');
-
+const AWS = require('aws-sdk');
+const multiparty = require('multiparty');
+const s3 = new AWS.S3();
 
 const AuthController = require('./controllers/AuthController');
 
@@ -282,6 +284,12 @@ app.post('/addNotice', (req,res) => {
 
 		
 }*/);
+
+
+
+app.post('/upload', (req,res) => {
+	
+});
 
 
 app.get('/postJob', (req,res) => {
@@ -561,11 +569,26 @@ app.get('/downloadJD/:id', (req,res) => {
 app.post('/updateDP', (req,res) => {
 	
 	let dp = req.files.dp;
+	let myKey = `dp_${req.session.email}.jpg`;
+	let myBucket = 'troy96';
 	dp.mv(__dirname+`/public/images/dp/dp_${req.session.email}.jpg`, function(err) {
 	if (err)
-		return res.status(500).send(err);
-	console.log('DP updated!');
-	res.redirect('/profile');
+		return res.status(500).send(err);			
+	fs.readFile(`public/images/dp/dp_${req.session.email}.jpg`, function (err, data) {
+		if (err) return res.status(500).send(err);
+		params = {Bucket: myBucket, Key: myKey, Body: data };
+  		s3.putObject(params, function(err, data) {
+			  if (err) {
+				  console.log(err)
+			} else {
+				  console.log("Successfully uploaded data to myBucket/myKey");
+		}
+	});
+}); 
+	setTimeout(() => {
+		res.redirect('/profile');
+	},500)
+	
 	});
 
 });

@@ -12,6 +12,7 @@
   "author": "Priyanka Rawat, Nutan Gupta, Tuhin Roy, Sweet Kumar, Sarthak Agarwal",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.382.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
@@ -25,6 +26,8 @@
     "express-validator": "^5.3.0",
     "hbs": "^4.0.1",
     "mongoose": "^5.2.13",
+    "multipart": "^0.1.5",
+    "multiparty": "^4.2.1",
     "nodemailer": "^4.6.8"
   }
 }
