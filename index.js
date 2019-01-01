@@ -571,7 +571,7 @@ app.post('/updateDP', (req,res) => {
 	let dp = req.files.dp;
 	let myKey = `dp_${req.session.email}.jpg`;
 	let myBucket = 'troy96';
-	dp.mv(__dirname+`/public/images/dp/dp_${req.session.email}.jpg`, function(err) {
+	dp.mv(`public/images/dp/dp_${req.session.email}.jpg`, function(err) {
 	if (err)
 		return res.status(500).send(err);			
 	fs.readFile(`public/images/dp/dp_${req.session.email}.jpg`, function (err, data) {
@@ -584,12 +584,9 @@ app.post('/updateDP', (req,res) => {
 				  console.log("Successfully uploaded data to myBucket/myKey");
 		}
 	});
-}); 
-	setTimeout(() => {
-		res.redirect('/profile');
-	},500)
-	
-	});
+});
+res.redirect('/profile'); 
+});
 
 });
 
