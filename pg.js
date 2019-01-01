@@ -1,4 +1,4 @@
-var AWS = require('aws-sdk');
+
 var fs =  require('fs');
 
 var s3 = new AWS.S3();
