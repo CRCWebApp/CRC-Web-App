@@ -6,6 +6,7 @@ const app = require('./../index');
 const authController = require('./../controllers/AuthController');
 const homeController = require('./../controllers/HomeController');
 const dashboardController  = require('./../controllers/DashboardController');
+const jobController = require('./../controllers/JobController');
 
 /**
  * Root Route
@@ -37,6 +38,15 @@ app.get('/dashboard', dashboardController.getDashBoard);
 //POST: /dashboard
 app.post('/dashboard', dashboardController.postDashboard, dashboardController.storeFilteredStudents);
 
+/**
+ * Job Routes
+ */
+
+//GET :/postJob
+app.get('postJob', jobController.getNewJob);
+
+//POST: /postJob
+app.post('/postJob', jobController.postNewJob);
 
 module.exports = app;
 

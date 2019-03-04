@@ -14,8 +14,7 @@ The Corporate Resource Center (CRC) of the Invertis University has nearly been d
  4) Database Server - MongoDB with Mongoose https://www.mongodb.com/  https://mongoosejs.com/
  
 # Team Members and Responsibilities
- 1) Priyanka Rawat -        Application Deployment on Heroku and Amazon ElasticBeanstalk.
- 2) Nutan Gupta -           Testing the utility functions and routes using Mocha.js.
- 3) Tuhin Roy -             Runtime, App server and routing layer with Node.js.
- 4) Sweet Kumar -           Presentation and View Layer Logic with Handlebars.js.
- 5) Sarthak Agarwal -       Database designing and administration using MongoDB and Mongoose.
+  1) Tuhin Roy -             Application server and REST APIs with Node.js and Express.
+  2) Sweet Kumar -           Presentation and View Layer Logic with Handlebars.js.
+  3) Priyanka Rawat -        Application Deployment on Heroku and Amazon ElasticBeanstalk.
+  4) Sarthak Agarwal -       Database designing and administration using MongoDB and Mongoose.
