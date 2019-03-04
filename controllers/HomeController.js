@@ -3,9 +3,11 @@ const app = require('./../index');
 let getHome = (req,res) => {
 
 	if(!!req.session.email){
-		(app.locals.type === 'Student') ?
-			res.redirect('/profile') :
-            res.redirect('/dashboard');
+        (app.locals.type === 'Student') 
+            ?
+                res.redirect('/profile') 
+            :
+                res.redirect('/dashboard');
     }
     else{
 	    res.render('index',{
@@ -13,4 +15,4 @@ let getHome = (req,res) => {
 	    });
     }
 }
-module.exports = {getHome} 
+module.exports = {getHome}; 

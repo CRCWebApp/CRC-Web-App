@@ -88,51 +88,8 @@ app.get('/profile', (req,res) => {					//GET /profile will be rendered with prof
 	}
 });
 
-app.get('/dashboard', (req,res) => {
-	if(typeof req.session.email === 'undefined'){	//or will be redirected if not in session
-		res.redirect('/login');
-	}
-	else{
-		if(global.utype === 'Student'){
-			res.redirect('/profile');
-		}
-		else{
-				Student.find().then((students) => {
-					Job.find().then((jobs) => {
-						res.render('dashboard',{
-							pageTitle:'Admin Dashboard',
-							students,
-							jobs
-					})	
-				
-			});
-		}, (e) => {
-			console.log('Error',e);
-		});
-	}
-}
-	
-});
 
-app.post('/dashboard', (req,res,next) => {
-	let criteriaVal = req.body.optionV;
-	let start = req.body.start;
-	let end = req.body.end;
-	let branch = req.body.branch;
-	
-	Student.find({ $and: [ { tenthMarks: { $gte: criteriaVal}}, { twelvthMarks: { $gte: criteriaVal}}, { btechMarks: { $gte: criteriaVal}}, { startyear: { $eq: start}}, { endyear: { $eq: end}}, { course: { $eq: branch}} ]})
 
-		.then((students) => {
-			req.students = students;
-			next();
-		})
-		.catch((e) => {
-			console.log('Error',e);
-		});
-}, (req,res,next) => {
-	f_students = req.students
-	res.send(f_students);
-});
 
 app.get('/notices', (req,res) => {
 	if(typeof req.session.email === 'undefined'){	

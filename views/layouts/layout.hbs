@@ -67,8 +67,9 @@ $(document).ready(function(){
         var startyear = $('#startyear').val();
         var endyear = $('#endyear').val();
         var branch = $('#branch').val();
+        alert(startyear);
      
-        $.post("https://crc-server.herokuapp.com/dashboard",
+        $.post("http://localhost:3000/dashboard",
             {
                 optionV : optionVal,
                 start : startyear,
