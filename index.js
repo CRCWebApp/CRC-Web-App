@@ -3,7 +3,7 @@ const expressValidator = require('express-validator');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const app = express();
+const app = module.exports = express();
 const PORT = process.env.PORT || 3000;
 const path = require('path');
 const fs = require('fs');
@@ -22,7 +22,6 @@ const AWS = require('aws-sdk');
 const multiparty = require('multiparty');
 const s3 = new AWS.S3();
 
-const AuthController = require('./controllers/AuthController');
 
 require('dotenv').config();
 
@@ -58,81 +57,6 @@ app.use((req, res, next) => {				//Middleware to pass the session object to the 
 app.use(function(req, res, next) {
 	res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
 	next();
-});
-
-
-app.get('/', (req,res) => {
-
-	if(typeof req.session.email !== "undefined"){
-		if(app.locals.type === 'Student'){
-			res.redirect('/profile');
-		}
-		else{
-			res.redirect('/dashboard');
-		}
-	}
-	
-	else{
-	res.render('index',{
-		pageTitle:'Welcome to CRC, Invertis University'
-	});
- }
-	
-});
-
-
-app.get('/login', (req,res) => {
-	if(typeof req.session.email !== "undefined"){
-		if(app.locals.type === 'Student'){
-			res.redirect('/profile');
-		}
-		else{
-			res.redirect('/dashboard');
-		}
-	}
-	
-	else{
-	res.render('login',{
-		pageTitle:'Login'
-	});
-}
-});
-
-
-app.post('/login', (req,res) => {	//POST /login handler to redirect the request to	
-	let email = req.body.email;
-	let pass = req.body.pass;
-	Student.find({email}).then((student) => {
-		Student.checkValidPasswords(pass, student[0].password).then(() => {
-			let Type = student[0].type;
-			req.session.email = email;
-			req.session.pass = pass;
-			app.locals.session = req.session;
-			global.utype = Type;
-			app.locals.type = Type;
-			res.redirect('/profile');
-		}).catch((e) => {
-			res.render('login', {error: 'Wrong Student Credentials!! Try login again'});
-		});
-	}).catch((e) => 
-		Admin.find({email}).then((admin) => {
-			Admin.checkValidPasswords(pass, admin[0].password).then(() => {
-				let Type = admin[0].type;
-				req.session.email = email;
-				req.session.pass = pass;
-				app.locals.session = req.session;
-				global.utype = Type;
-				app.locals.type = Type;
-				res.redirect('/dashboard');
-			}).catch((e) => {
-			res.render('login', {error: 'Wrong Admin Credentials!! Try login again'});	
-		});
-	})
-	.catch((e) => {
-			res.render('login', {error: 'Something went wrong!! Try login again'});	
-		})
-	);
-					
 });
 
 app.get('/profile', (req,res) => {					//GET /profile will be rendered with profile
@@ -539,7 +463,7 @@ app.get('/exportFile', (req,res) => {
 	
 });
 
-app.get('/logout', AuthController.logout);
+//app.get('/logout', AuthController.logout);
 
 
 app.get('/downloadCV/:id', (req,res) => {
@@ -589,6 +513,8 @@ res.redirect('/profile');
 });
 
 });
+
+require('./routes/routes');
 
 app.listen(PORT, () => {
 	console.log(`Server listening at ${PORT}...`);
