@@ -1,5 +1,5 @@
 /**
- * Created by Tuhin Roy on 4th March, 2019
+ * Updated by Tuhin Roy on 9th March, 2019
  */
 
 const app = require('./../index');
@@ -8,6 +8,7 @@ const homeController = require('./../controllers/HomeController');
 const dashboardController  = require('./../controllers/DashboardController');
 const jobController = require('./../controllers/JobController');
 const profileController = require('./../controllers/ProfileController');
+const noticeController = require('./../controllers/NoticeController');
 
 /**
  * Root Route
@@ -57,6 +58,17 @@ app.post('/postJob', jobController.postNewJob);
  //GET: /profile
 app.get('/profile', profileController.getProfile);
 
+/**
+ * Notice Routes
+ */
+//GET :/notices
+app.get('/notices', noticeController.getAll);
+
+//GET: /addNotice
+app.get('/addNotice', noticeController.getNotice);
+
+//POST: /postNotice
+app.post('/postNotice', noticeController.postNotice);
 
 module.exports = app;
 
