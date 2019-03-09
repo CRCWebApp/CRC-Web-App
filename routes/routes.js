@@ -9,6 +9,7 @@ const dashboardController  = require('./../controllers/DashboardController');
 const jobController = require('./../controllers/JobController');
 const profileController = require('./../controllers/ProfileController');
 const noticeController = require('./../controllers/NoticeController');
+const registrationController = require('./../controllers/RegistrationController');
 
 /**
  * Root Route
@@ -41,6 +42,16 @@ app.get('/dashboard', dashboardController.getDashBoard);
 app.post('/dashboard', dashboardController.postDashboard, dashboardController.storeFilteredStudents);
 
 /**
+ * Student Registration Routes
+ */
+
+ //GET: /addStudent
+ app.get('/addStudent', registrationController.getStudent);
+
+ //POST: /registration
+ app.post('/registration', registrationController.registerStudent);
+
+/**
  * Job Routes
  */
 
@@ -49,6 +60,9 @@ app.get('/postJob', jobController.getNewJob);
 
 //POST: /postJob
 app.post('/postJob', jobController.postNewJob);
+
+//GET :/getJobs
+app.get('/getJobs', jobController.getAll);
 
 
 /**

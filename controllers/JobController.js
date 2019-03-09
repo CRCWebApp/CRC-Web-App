@@ -2,12 +2,12 @@ const {Job} = require('./../models/jobModel');
 const path  = require('path');
 
 let getNewJob = (req,res) => {
-    if(typeof req.session.email === 'undefined'){	
-		res.redirect('/login');
+    if(!!req.session.email){	
+			res.render('job', {pageTitle:'Post Job'});
 	}
 	else{
-		res.render('job', {pageTitle:'Post Job'});
-    }
+		res.redirect('/login');
+	}
 }
 
 let postNewJob = (req,res) => {
@@ -42,7 +42,22 @@ let postNewJob = (req,res) => {
 
 }
 
+let getAll = (req,res) => {
+
+	if(typeof req.session.email === 'undefined'){	
+		res.redirect('/login');
+	}
+	else{
+		Job.find({}).then((jobs) => {
+			res.render('viewJobs', {pageTitle:'Get Jobs',jobs});
+		}).catch((e) => {
+			console.log(e);
+		});
+	}
+}
+
 module.exports = {
     getNewJob,
-    postNewJob
+		postNewJob,
+		getAll
 }

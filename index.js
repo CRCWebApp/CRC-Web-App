@@ -59,83 +59,12 @@ app.use(function(req, res, next) {
 	next();
 });
 
-app.get('/profile', (req,res) => {					//GET /profile will be rendered with profile
-	if(typeof req.session.email === 'undefined'){	//or will be redirected if not in session
-		res.redirect('/login');
-	}
-	else{
-		if(global.utype === 'Admin'){
-			res.redirect('/dashboard');
-		}
-		else{
-			let email = req.session.email;
-			Student.find({email:email}).then((student) => {
-				Job.find().then((jobs) => {
-			res.render('profile',{
-			pageTitle:'Student Profile',	
-			layout:'layout.hbs',
-			Uname: email,
-			student,
-			jobs
-
-			})
-			});
-		}, () => {
-			console.log('Error',e);
-		});
-		}
-	
-	}
-});
 
 
 
 
-app.get('/notices', (req,res) => {
-	if(typeof req.session.email === 'undefined'){	
-		res.redirect('/login');
-	}else{
-		Notice.find({}).then((notices) => {
-			res.render('notices',{
-				pageTitle:'Noties',
-				title:'Notices',
-				notices
-			});
-		}).catch(
-		(e) => console.log(e));
-			
 
-	}
-});
-
-app.get('/addNotice', (req,res) => {
-	if(typeof req.session.email === 'undefined'){	
-		res.redirect('/login');
-	}
-	else{
-		res.render('add_notice', {pageTitle:'Add Notice'});
-	}
-});
-
-app.post('/addNotice', (req,res) => {
-	let title = req.body.title;
-	let description = req.body.desc;
-	req.title = title;
-	req.description = description;
-
-	var notice = new Notice({
-		sender:'CRC',
-		title,
-		description
-	});
-
-	notice.save().then((notice) =>{
-		res.redirect('dashboard');
-	}).catch((e) => {
-		console.log(e);
-	});
-
-} /*(req,res,next) => {	
+app.post('/addNotice',  /*(req,res,next) => {	
 	var studentsEmails = [];
 	Student.find({}).then((students) => {
 			students.forEach((student) => studentsEmails.push(student.email));
@@ -167,149 +96,10 @@ app.post('/addNotice', (req,res) => {
 }*/);
 
 
-
-app.post('/upload', (req,res) => {
-	
-});
+app.get('/addStudent',);
 
 
-//app.get('/changePassword', (req,res) => {
-//	if(typeof req.session.email === 'undefined'){
-//		res.redirect('/login');
-//	}
-//	else{
-//		res.render('changePassword');
-//	}
-//});
-
-//app.post('/changePassword', (req,res) => {
-//	let email = req.session.email;
-//	let error = 'No error';
-//	let curr_pass = req.body.curr_pass;
-//	let new_pass = req.body.new_pass;
-//	let conf_pass = req.body.conf_pass;
-//	
-//	Student.find({email}).then((student) => {
-//		Student.checkValidPasswords(curr_pass, student[0].password).then(() => {
-//			console.log('fetched pswd - '+student[0].password);
-//			if(new_pass === conf_pass){
-//				console.log('Checking new and confirm passwd');
-//			
-//					Student.updatePassword(new_pass);
-//					console.log('password changed!!');
-//					res.redirect('/profile');
-//				}
-//			else{
-//				console.log('Error in update');
-//			}
-//
-//		})
-//		.catch(() => {
-//			console.log('No match!');
-//		})
-//	}).catch(() => {
-//		res.render('changePassword',{error:'Incorrect current password!'});
-//	})
-//
-//});
-
-app.get('/getJobs', (req,res) => {
-
-	if(typeof req.session.email === 'undefined'){	
-		res.redirect('/login');
-	}
-	else{
-		Job.find({}).then((jobs) => {
-			res.render('viewJobs', {pageTitle:'Get Jobs',jobs});
-		}).catch((e) => {
-			console.log(e);
-		});
-	}
-});
-
-app.get('/addStudent',(req,res) => {
-	if(typeof req.session.email === 'undefined') {	
-		res.redirect('/login');
-	}
-	else {
-
-		if(req.session.email === 'v@gmail.com') 
-			res.render('registration', {pageTitle:'Student Registration'});
-		
-		else 
-			res.render('profile');
-		
-	}
-});
-
-
-app.post('/registration', (req,res,next) => {
-	let first_name = req.body.firstname;
-	let last_name = req.body.lastname;
-	let email = req.body.email;
-	let dob = req.body.dob;
-	let password = req.body.password;
-	let gender = req.body.gender;
-	let phone = req.body.mobile_no;
-	let tenthMarks = Number(req.body.highschool_marks);
-	let twelvthMarks = Number(req.body.Intermediate_marks);
-	let btechMarks = Number(req.body.btech_marks);
-	let course = req.body.branch;
-	let startyear = req.body.startyear;
-	let endyear = req.body.endyear;
-	let collegeID = req.body.College_id;
-	let training_company = req.body.training_company;
-	let training_location = req.body.training_location;
-	let training_duration = req.body.training_duration;
-	let native_place = req.body.native_place;
-	req.email = email;
-	req.first_name = first_name;
-
-	let resume = req.files.resume;
-
- 
-  	resume.mv(__dirname+`/docs/cv_${collegeID}.doc`, function(err) {
-    if (err)
-      return res.status(500).send(err);
-
-  	 console.log('File uploaded!');
-  	});
-
-	dob = dob.split('/');
-	dob = dob[1]+'/'+dob[0]+'/'+dob[2];
-
-	if(tenthMarks<10){
-		tenthMarks = tenthMarks*9.5;
-	}
-	var newStudent = new Student({
-		first_name, 
-		last_name, 
-		email, 
-		dob, 
-		password, 
-		gender, 
-		phone, 
-		tenthMarks,
-		btechMarks,
-		twelvthMarks, 
-		course, 
-		collegeID,
-		startyear, 
-		endyear,
-		training_company, 
-		training_duration, 
-		training_location,
-		native_place
-	});
-
-
-	newStudent.save().then((student) => {
-		console.log('saved!!  '+student);
-		res.redirect('/dashboard'); 
-	}).catch((e) => {
-		console.log('Error in saving!!'+e);
-	});
-} /*(req,res,next) => {
+app.post('/registration',  /*(req,res,next) => {
 	var transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
