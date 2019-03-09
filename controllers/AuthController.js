@@ -2,6 +2,11 @@ const {Student}  = require('./../models/studentModel');
 const {Admin} = require('./../models/adminModel');
 const app = require('./../index');
 
+/**
+ * getLogin
+ * @param req
+ * @param res
+ */
 let getLogin =  (req, res) => {
 	if(!!req.session.email){
 		(app.locals.type === 'Student') 
@@ -16,7 +21,12 @@ let getLogin =  (req, res) => {
 		});
 	}
 };
-	
+
+/**
+ * postLogin
+ * @param req 
+ * @param res 
+ */
 let postLogin = (req,res) => {		
 		let email = req.body.email;
 		let pass = req.body.pass;
@@ -51,6 +61,11 @@ let postLogin = (req,res) => {
 	});
 	}
 	
+/**
+ * logout
+ * @param {*} req 
+ * @param {*} res 
+ */	
 let logout = (req,res) => {
 	(!!req.session.email) 
 		?	

@@ -7,6 +7,7 @@ const authController = require('./../controllers/AuthController');
 const homeController = require('./../controllers/HomeController');
 const dashboardController  = require('./../controllers/DashboardController');
 const jobController = require('./../controllers/JobController');
+const profileController = require('./../controllers/ProfileController');
 
 /**
  * Root Route
@@ -47,6 +48,15 @@ app.get('postJob', jobController.getNewJob);
 
 //POST: /postJob
 app.post('/postJob', jobController.postNewJob);
+
+
+/**
+ * Student Profile Routes
+ */
+
+ //GET: /profile
+app.get('/profile', profileController.getProfile);
+
 
 module.exports = app;
 
