@@ -36,10 +36,10 @@ let postLogin = (req,res) => {
 				req.session.email = email;
 				req.session.pass = pass;
 				app.locals.session = req.session;
-				app.locals.utype  = 'Student';
+				app.locals.type  = 'Student';
 				res.redirect('/profile');
 			}).catch(e => {
-				res.status(401).send();
+				res.render('login', {error: 'Wrong Student Credentials!! Try login again'});
 			});
 		})
 		.catch(() => {
@@ -49,13 +49,13 @@ let postLogin = (req,res) => {
 					req.session.email = email;
 					req.session.pass = pass;
 					app.locals.session = req.session;																																																					
-					app.locals.utype = Type;																																																																																																																																																																																																			
+					app.locals.type = Type;																																																																																																																																																																																																			
 					res.redirect('/dashboard');
 				}).catch((e) => {
-					res.status(401).send();
+					res.render('login', {error: 'Wrong Admin Credentials!! Try login again'}); 
 			});																																																																																																																																					
 		})
-		.catch(e => console.log('Error', e))
+		.catch(e => res.render('login', {error: 'Something went wrong!! Try login again'}))
 
 						
 	});
@@ -67,12 +67,13 @@ let postLogin = (req,res) => {
  * @param {*} res 
  */	
 let logout = (req,res) => {
-	(!!req.session.email) 
-		?	
-			res.redirect('/login') 
-		:
-			req.session.destroy();
-			res.redirect('/');
+	if(!!req.session.email){
+		req.session.destroy()
+		res.redirect('/')
+	}
+	else{
+		res.redirect('/login') 
+	} 
 }
 	
 module.exports = {

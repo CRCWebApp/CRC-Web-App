@@ -1,4 +1,5 @@
-const {} = require('./../models/jobModel');
+const {Job} = require('./../models/jobModel');
+const path  = require('path');
 
 let getNewJob = (req,res) => {
     if(typeof req.session.email === 'undefined'){	
@@ -10,7 +11,7 @@ let getNewJob = (req,res) => {
 }
 
 let postNewJob = (req,res) => {
-    let comp_name = req.body.comp_name;
+  let comp_name = req.body.comp_name;
 	let placement_type = req.body.placement_type;
 	let location = req.body.location;
 	let venue = req.body.venue;
@@ -22,20 +23,21 @@ let postNewJob = (req,res) => {
 	let comp_key = comp_name.split(' ');
 	comp_key = comp_key[0];
 
-	jd.mv(__dirname+`/docs/jd/jd_${comp_key}.doc`, function(err) {
-    if (err)
-      	return res.status(500).send(err);
-      console.log('JD uploaded!');
+	jd.mv(path.join(__dirname,`../docs/jd/jd_${comp_key}.doc`), err=> {
+    if (err) return res.status(500).send(err);
+      	console.log('JD uploaded!');
       });
     const job = new Job({
-		comp_name, placement_type, location, venue, date, time, eligibility, comp_key
+			comp_name, placement_type, location, venue, date, time, eligibility, comp_key
 	});
 
 
-	job.save().then((job) => {
-		res.redirect('/dashboard');
-	}).catch((e) => {
-		console.log('Error'+e);
+	return job.save()
+		.then(job => {
+			res.redirect('/dashboard');
+		})
+		.catch(e => {
+			console.log('Error'+e);
 	});
 
 }

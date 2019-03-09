@@ -45,7 +45,7 @@ app.post('/dashboard', dashboardController.postDashboard, dashboardController.st
  */
 
 //GET :/postJob
-app.get('postJob', jobController.getNewJob);
+app.get('/postJob', jobController.getNewJob);
 
 //POST: /postJob
 app.post('/postJob', jobController.postNewJob);
