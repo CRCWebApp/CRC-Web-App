@@ -10,6 +10,7 @@ const jobController = require('./../controllers/JobController');
 const profileController = require('./../controllers/ProfileController');
 const noticeController = require('./../controllers/NoticeController');
 const registrationController = require('./../controllers/RegistrationController');
+const fileController = require('./../controllers/FIleController');
 
 /**
  * Root Route
@@ -83,6 +84,27 @@ app.get('/addNotice', noticeController.getNotice);
 
 //POST: /postNotice
 app.post('/postNotice', noticeController.postNotice);
+
+
+/**
+ * File Handling Routes
+ */
+//GET: /exportFile
+
+app.get('/exportFile', fileController.getExportFile);
+
+//POST: /exportFile
+app.post('/exportFile', fileController.postExportFile);
+
+//GET: /downloadCV/:id
+app.get('/downloadCV/:id', fileController.downloadCV);
+
+//GET: /downloadJD/:id
+app.get('/downloadJD/:id', fileController.downloadJD);
+
+//POST: /updateDP
+app.post('updateDP', fileController.updateDP);
+
 
 module.exports = app;
 

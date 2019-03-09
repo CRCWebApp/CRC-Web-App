@@ -8,18 +8,11 @@ const PORT = process.env.PORT || 3000;
 const path = require('path');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
-const bcrypt = require('bcryptjs');
 const {mongoose} = require('./db/mongoose');
-const {Student} = require('./models/studentModel');
-const {Job} = require('./models/jobModel');
-const {Admin} = require('./models/adminModel');
-const {Notice} = require('./models/noticeModel');
 const hbs = require('express-handlebars');
 const util = require('util');
-const writeFile = util.promisify(fs.writeFile);
 const fileUpload = require('express-fileupload');
 const AWS = require('aws-sdk');
-const multiparty = require('multiparty');
 const s3 = new AWS.S3();
 
 
@@ -131,91 +124,21 @@ app.post('/registration',  /*(req,res,next) => {
 	});*/
 );  
 
-app.post('/exportFile', (req,res,next) => {
-	var students = req.body.fetchedData
-	var data='';
-	for (var i = 0;i < students.length; i++) {
-    	data=data+students[i][0]+'\t'+students[i][1]+'\t'
-    		+students[i][2]+'\t'+students[i][3]+'\t'+students[i][4]+'\t'
-    		+students[i][5]+'\t'+students[i][6]+'\t'+students[i][7]+'\t'+students[i][8]
-    		+'\t'+students[i][9]+'\t'+students[i][10]+'\t'+students[i][11]+'\n';
- 	}
-	writeFile('studentsRecord.xls',data)
-		.then(() => {
-			res.send();
-		})
-		.catch(() => {
-			console.log('Error');
-		});
-	
-});
+app.post('/exportFile', );
 
 /*app.get('/modal', (req,resume) => {
 	res.render('modal');
 });*/
 
-app.get('/exportFile', (req,res) => {
-
-	if(typeof req.session.email === 'undefined'){	
-		res.redirect('/login');
-	}
-	else{
-		let file = __dirname+'/studentsRecord.xls';
-		res.download(file);
-	}
-	
-});
-
-//app.get('/logout', AuthController.logout);
+app.get('/exportFile', );
 
 
-app.get('/downloadCV/:id', (req,res) => {
-	if(typeof req.session.email === 'undefined'){	
-		res.redirect('/login');
-	}
-	else{
-		res.download(__dirname+`/docs/cv_${req.params.id}.doc`);
-	}
-}, (req,res) => {
-	res.redirect('/dashboard');
-});
 
-app.get('/downloadJD/:id', (req,res) => {
+app.get('/downloadCV/:id', );
 
-	if(typeof req.session.email === 'undefined'){	
-		res.redirect('/login');
-	}
-	else{
-		res.download(__dirname+`/docs/jd/jd_${req.params.id}.doc`);
-	}
-	
-}, (req,res) => {
-	res.redirect('/dashboard');
-});
+app.get('/downloadJD/:id', );
 
-app.post('/updateDP', (req,res) => {
-	
-	let dp = req.files.dp;
-	let myKey = `dp_${req.session.email}.jpg`;
-	let myBucket = 'troy96';
-	dp.mv(`public/images/dp/dp_${req.session.email}.jpg`, function(err) {
-	if (err)
-		return res.status(500).send(err);			
-	fs.readFile(`public/images/dp/dp_${req.session.email}.jpg`, function (err, data) {
-		if (err) return res.status(500).send(err);
-		params = {Bucket: myBucket, Key: myKey, Body: data };
-  		s3.putObject(params, function(err, data) {
-			  if (err) {
-				  console.log(err)
-			} else {
-				  console.log("Successfully uploaded data to myBucket/myKey");
-		}
-	});
-});
-res.redirect('/profile'); 
-});
-
-});
+app.post('/updateDP', );
 
 require('./routes/routes');
 

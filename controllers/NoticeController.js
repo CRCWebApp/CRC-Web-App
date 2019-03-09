@@ -1,5 +1,5 @@
 const app = require('./../index');
-const {} = require('./../models/noticeModel');
+const {Notice} = require('./../models/noticeModel');
 
 let getAll = (req,res) => {
 	if(!!req.session.email){	
@@ -35,19 +35,19 @@ let postNotice = (req,res) => {
 	req.title = title;
 	req.description = description;
 
-	var notice = new Notice({
+	let notice = new Notice({
 		sender:'CRC',
 		title,
 		description
 	});
 
-	notice.save().then((notice) =>{
-		res.redirect('dashboard');
-	}).catch((e) => {
-		console.log(e);
-	});
-
-}
+    return notice.save()
+        .then(notice =>{
+		    res.redirect('dashboard');
+	    }).catch(e => {
+		    console.log(e);
+        });
+};
 
 
 module.exports = {getAll, getNotice, postNotice};

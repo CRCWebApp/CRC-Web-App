@@ -1,6 +1,15 @@
+/**
+ * Created by Tuhin Roy on 9th March, 2019
+ */
+
 const {Student} = require('./../models/studentModel');
 const {Job} = require('./../models/jobModel');
 
+/**
+ * Dashboard Get Request Handler
+ * @param {*} req
+ * @param {*} res
+ */
 let getDashBoard = (req,res) => {
 	if(!req.session.email){	
 		res.redirect('/login');
@@ -28,6 +37,13 @@ let getDashBoard = (req,res) => {
     }
 }
 
+/**
+ * Dashboard Post Request Handler
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 let postDashboard = (req,res,next) => {
 	let criteriaVal = req.body.optionV;
 	let start = req.body.start;
@@ -42,6 +58,13 @@ let postDashboard = (req,res,next) => {
 			console.log('Error',e);
 		});
 }
+
+/**
+ * Middleware to send filtered students to Front End
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 
 let storeFilteredStudents = (req,res,next) => {
 	f_students = req.students;

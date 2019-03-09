@@ -1,5 +1,15 @@
+/**
+ * Created by Tuhin Roy on 9th March, 2019
+ */
+
 const {Job} = require('./../models/jobModel');
 const path  = require('path');
+
+/**
+ * New Job GET Request Handler
+ * @param {*} req 
+ * @param {*} res 
+ */
 
 let getNewJob = (req,res) => {
     if(!!req.session.email){	
@@ -10,6 +20,11 @@ let getNewJob = (req,res) => {
 	}
 }
 
+/**
+ * New Job POST Request Handler
+ * @param {*} req 
+ * @param {*} res 
+ */
 let postNewJob = (req,res) => {
   let comp_name = req.body.comp_name;
 	let placement_type = req.body.placement_type;
@@ -42,6 +57,11 @@ let postNewJob = (req,res) => {
 
 }
 
+/**
+ * Get All Jobs Request Handler
+ * @param {*} req
+ * @param {*} res
+ */
 let getAll = (req,res) => {
 
 	if(typeof req.session.email === 'undefined'){	

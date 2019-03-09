@@ -1,5 +1,13 @@
+/**
+ * Created by Tuhin Roy on 9th March, 2019
+ */
 const app = require('./../index');
 
+/**
+ * Home GET Request Handler
+ * @param {*} req 
+ * @param {*} res 
+ */
 let getHome = (req,res) => {
 
 	if(!!req.session.email){

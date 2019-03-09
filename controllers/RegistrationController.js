@@ -1,7 +1,17 @@
+/**
+ * Created by Tuhin Roy on 9th March, 2019
+ */
+
 const app = require('./../index');
 const {Student} = require('./../models/studentModel');
 const path = require('path');
 
+
+/**
+ * Student Registration Page Get Request Handler
+ * @param {*} req 
+ * @param {*} res 
+ */
 let getStudent = (req,res) => {
 	if(!!req.session.email) {
         if(req.session.email === 'v@gmail.com') 
@@ -15,6 +25,11 @@ let getStudent = (req,res) => {
 	}
 }
 
+/**
+ * New Student Registration Request Handler
+ * @param {*} req 
+ * @param {*} res 
+ */
 let registerStudent = (req,res) => {
 	let first_name = req.body.firstname;
 	let last_name = req.body.lastname;
@@ -37,10 +52,9 @@ let registerStudent = (req,res) => {
 	req.email = email;
 	req.first_name = first_name;
 
-	let resume = req.files.resume;
-
- 
-  	resume.mv(path.join(__dirname, `../docs/cv_${collegeID}.doc`), function(err) {
+    let resume = req.files.resume;
+    
+    resume.mv(path.join(__dirname, `../docs/cv_${collegeID}.doc`), function(err) {
     if (err)
       return res.status(500).send(err);
 

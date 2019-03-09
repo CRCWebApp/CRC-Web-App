@@ -1,3 +1,6 @@
+/**
+ * Created by Tuhin Roy on 9th March,2019
+ */
 const {Student}  = require('./../models/studentModel');
 const {Admin} = require('./../models/adminModel');
 const app = require('./../index');
