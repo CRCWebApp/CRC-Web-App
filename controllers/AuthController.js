@@ -1,9 +1,9 @@
 /**
- * Created by Tuhin Roy on 9th March,2019
+ * Created by Tuhin Roy on 10th March,2019
  */
 const {Student}  = require('./../models/studentModel');
 const {Admin} = require('./../models/adminModel');
-const app = require('./../index');
+let singleton = require('./../singleton');
 
 /**
  * getLogin
@@ -12,7 +12,7 @@ const app = require('./../index');
  */
 let getLogin =  (req, res) => {
 	if(!!req.session.email){
-		(app.locals.type === 'Student') 
+		(singleton.expressApp.locals.type === 'Student') 
 			?
 				res.redirect('/profile') 
 			:
@@ -38,23 +38,24 @@ let postLogin = (req,res) => {
 				let Type = student[0].type;
 				req.session.email = email;
 				req.session.pass = pass;
-				app.locals.session = req.session;
-				app.locals.type  = 'Student';
+				singleton.expressApp.locals.session = req.session;
+				singleton.expressApp.locals.type  = 'Student';
 				res.redirect('/profile');
 			}).catch(e => {
 				res.render('login', {error: 'Wrong Student Credentials!! Try login again'});
 			});
 		})
 		.catch(() => {
-			Admin.find({email}).then((admin) => {
-				Admin.checkValidPasswords(pass, admin[0].password).then(() => {
+			return Admin.find({email}).then(admin=> {
+				return Admin.checkValidPasswords(pass, admin[0].password).then(() => {
 					let Type = admin[0].type;
 					req.session.email = email;
 					req.session.pass = pass;
-					app.locals.session = req.session;																																																					
-					app.locals.type = Type;																																																																																																																																																																																																			
+					singleton.expressApp.locals.session = req.session;																																																					
+					singleton.expressApp.locals.type = Type;																																																																																																																																																																																																			
 					res.redirect('/dashboard');
 				}).catch((e) => {
+					console.log(e);
 					res.render('login', {error: 'Wrong Admin Credentials!! Try login again'}); 
 			});																																																																																																																																					
 		})

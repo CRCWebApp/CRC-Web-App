@@ -2,6 +2,7 @@
  * Created by Tuhin Roy on 9th March,2019
  */
 const fs = require('fs');
+const util = require('util');
 const writeFile = util.promisify(fs.writeFile);
 const path = require('path');
 const AWS = require('aws-sdk');

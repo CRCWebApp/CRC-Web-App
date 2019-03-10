@@ -12,6 +12,7 @@ const noticeController = require('./../controllers/NoticeController');
 const registrationController = require('./../controllers/RegistrationController');
 const fileController = require('./../controllers/FIleController');
 
+module.exports = app => {
 /**
  * Root Route
  */
@@ -105,6 +106,8 @@ app.get('/downloadJD/:id', fileController.downloadJD);
 //POST: /updateDP
 app.post('updateDP', fileController.updateDP);
 
+}
 
-module.exports = app;
+
+
 
