@@ -1,5 +1,7 @@
 const app = require('./../index');
 const {Notice} = require('./../models/noticeModel');
+const {Student} = require('./../models/studentModel');
+const {sendMail} = require('./../alerts/email_client');
 
 let getAll = (req,res) => {
 	if(!!req.session.email){	
@@ -43,7 +45,15 @@ let postNotice = (req,res) => {
 
     return notice.save()
         .then(notice =>{
-		    res.redirect('dashboard');
+			console.log(notice);
+			return Student.find({},{email:true})
+				.then(async students=> {
+					let mailResult = await sendMail(process.env.MAILER_USERNAME, students, title, description);
+					console.log(mailResult);
+					res.redirect('dashboard');
+				})
+				.catch(e=> console.log(e))
+		    
 	    }).catch(e => {
 		    console.log(e);
         });

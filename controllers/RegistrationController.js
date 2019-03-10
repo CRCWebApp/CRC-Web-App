@@ -4,6 +4,7 @@
 
 const {Student} = require('./../models/studentModel');
 const path = require('path');
+const {sendMail} = require('./../alerts/email_client');
 
 
 /**
@@ -88,12 +89,20 @@ let registerStudent = (req,res) => {
 	});
 
 
-	return newStudent.save().then(student=> {
-		console.log('Saved!!');
-		res.redirect('/dashboard'); 
-	}).catch(e=> {
-		console.log('Error in saving!!'+e);
-	});
+	return newStudent.save()
+		.then(async student=> {
+			console.log(student);
+			let mailResult = await sendMail(process.env.MAILER_USERNAME, email, 'INFO from the CRC Department, Invertis University',
+						`<b>Hi ${first_name}</b>,
+						 <p>Your details were updated from our end! Have a good day ahead!</p>
+						 <p>Thanks</p>	
+						`);
+			console.log(mailResult);
+			res.redirect('/dashboard'); 
+		})
+		.catch(e=> {
+			console.log('Error in saving!!'+e);
+		});
 }
 
 
