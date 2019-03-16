@@ -57,15 +57,20 @@ app.post('/dashboard', dashboardController.postDashboard, dashboardController.st
  * Job Routes
  */
 
-//GET :/postJob
-app.get('/postJob', jobController.getNewJob);
+//GET :/job
+app.get('/job', jobController.getNewJob);
 
-//POST: /postJob
-app.post('/postJob', jobController.postNewJob);
+//GET: /job/:id
+app.get('/job/:id', jobController.getJobById);
 
-//GET :/getJobs
-app.get('/getJobs', jobController.getAll);
+//POST: /job
+app.post('/job', jobController.postNewJob);
 
+//GET: /jobs
+app.get('/jobs', jobController.getAll);
+
+//DELETE:  /job/:id
+app.delete('/job/:id', jobController.findJobByIdAndDelete);
 
 /**
  * Student Profile Routes

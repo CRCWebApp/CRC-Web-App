@@ -1,0 +1,59 @@
+<br/>
+<div class="container-fluid">
+<div class="well"> 
+<div class="table-responsive">
+<table class="table" id="jobDetailsTable">
+   <thead>
+    <tr>
+      <th scope="col">Field</th>
+      <th scope="col">Content</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#each jobList}}
+			<tr>
+  			<td name="jobId" id="jobId">Job ID</td>
+  			<td>{{_id}}</td>
+  		</tr>
+  		<tr>
+  			<td>Company Name</td>
+  			<td>{{comp_name}}</td>
+  		</tr>
+  		<tr>
+  			<td>Placement Type</td>
+  			<td>{{placement_type}}</td>
+  		</tr>
+			<tr>
+  			<td>Location</td>
+  			<td>{{location}}</td>
+  		</tr>
+  		<tr>
+  			<td>Venue</td>
+  			<td>{{venue}}</td>
+  		</tr>
+  		<tr>
+  			<td>Date</td>
+  			<td>{{date}}</td>
+  		</tr>
+  		<tr>
+  			<td>Time</td>
+  			<td>{{time}}</td>
+  		</tr>
+      <tr>
+        <td>Eigibility</td>
+        <td>{{eligibility}}</td>
+      </tr>
+  	{{/each}}		
+    </tbody>
+</table>
+</div>
+<button id="deleteJob" class="btn btn-danger">Delete Job</button>
+{{_id}}
+</div>
+</div>
+<hr/>
+</div>
+
+
+
+

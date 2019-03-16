@@ -4,6 +4,7 @@
 
 const {Job} = require('./../models/jobModel');
 const path  = require('path');
+const ObjectID = require('mongodb').ObjectID;
 
 /**
  * New Job GET Request Handler
@@ -19,6 +20,29 @@ let getNewJob = (req,res) => {
 		res.redirect('/login');
 	}
 }
+
+/**
+ * Get Job By Id
+ * @param {*} req 
+ * @param {*} res 
+ */
+let getJobById = (req,res) => {
+	const jobId = req.params.id;
+	const jobList = [];
+	if(!!req.session.email){
+		Job.findById({_id: jobId})
+			.then(job=>{
+				//console.log(job);
+				if(!job) return res.sendStatus(404);
+				jobList.push(job); //HBS can't iterate over object!
+				res.render('jobDetails', {jobList});
+			});
+	}
+	else{
+		res.redirect('/login');
+	}
+
+};
 
 /**
  * New Job POST Request Handler
@@ -76,8 +100,27 @@ let getAll = (req,res) => {
 	}
 }
 
+/**
+ * Find Job By ID And Delete
+ * @param {*} req 
+ * @param {*} res 
+ */
+let findJobByIdAndDelete = (req,res) => {
+	const jobId = req.params.id;
+	Job.findByIdAndDelete({_id: ObjectID(jobId)})
+		.then(deletedJob=>{
+			//console.log(deletedJob);
+			res.sendStatus(200);
+		})
+		.catch(e=> {
+			res.sendStatus(500);
+		});
+};
+
 module.exports = {
     getNewJob,
 		postNewJob,
-		getAll
+		getAll,
+		findJobByIdAndDelete,
+		getJobById
 }

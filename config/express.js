@@ -22,9 +22,8 @@ module.exports = app => {
 	}));
     app.engine( 'hbs', hbs( { 
         extname: 'hbs', 
-        defaultLayout: path.join(__dirname, '../views/layouts/layout.hbs'), 
+        defaultLayout: 'layout', 
         helpers: require('./handlebars-helpers'), 
-        layoutsDir: path.join(__dirname,'../views/layouts/'),
         partialsDir: path.join(__dirname,'../views/partials1/')
     }));
 
