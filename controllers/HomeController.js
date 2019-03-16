@@ -1,8 +1,8 @@
 /**
  * Created by Tuhin Roy on 9th March, 2019
  */
-const app = require('./../index');
 
+ const singleton = require('./../singleton');
 /**
  * Home GET Request Handler
  * @param {*} req 
@@ -11,7 +11,7 @@ const app = require('./../index');
 let getHome = (req,res) => {
 
 	if(!!req.session.email){
-        (app.locals.type === 'Student') 
+        (singleton.expressApp.locals.type === 'Student') 
             ?
                 res.redirect('/profile') 
             :

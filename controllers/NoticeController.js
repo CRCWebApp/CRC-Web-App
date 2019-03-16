@@ -1,4 +1,3 @@
-const app = require('./../index');
 const {Notice} = require('./../models/noticeModel');
 const {Student} = require('./../models/studentModel');
 const {sendMail} = require('./../alerts/email_client');

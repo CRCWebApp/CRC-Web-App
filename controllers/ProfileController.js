@@ -2,7 +2,6 @@
  * Created by Tuhin Roy on 9th March, 2019
  */
 
-const app = require('./../index');
 const {Student} = require('./../models/studentModel');
 const {Job} = require('./../models/jobModel');
 

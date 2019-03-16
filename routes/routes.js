@@ -2,7 +2,7 @@
  * Updated by Tuhin Roy on 9th March, 2019
  */
 
-const app = require('./../index');
+
 const authController = require('./../controllers/AuthController');
 const homeController = require('./../controllers/HomeController');
 const dashboardController  = require('./../controllers/DashboardController');

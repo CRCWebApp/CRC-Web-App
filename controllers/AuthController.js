@@ -44,6 +44,7 @@ let postLogin = (req,res) => {
 			}).catch(e => {
 				res.render('login', {error: 'Wrong Student Credentials!! Try login again'});
 			});
+			
 		})
 		.catch(() => {
 			return Admin.find({email}).then(admin=> {
