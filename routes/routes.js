@@ -11,6 +11,7 @@ const profileController = require('./../controllers/ProfileController');
 const noticeController = require('./../controllers/NoticeController');
 const registrationController = require('./../controllers/RegistrationController');
 const fileController = require('./../controllers/FIleController');
+const {checkSession} = require('./../middlewares/session');
 
 module.exports = app => {
 /**
@@ -58,19 +59,22 @@ app.post('/dashboard', dashboardController.postDashboard, dashboardController.st
  */
 
 //GET :/job
-app.get('/job', jobController.getNewJob);
+app.get('/job', checkSession, jobController.getNewJob);
 
 //GET: /job/:id
-app.get('/job/:id', jobController.getJobById);
-
-//POST: /job
-app.post('/job', jobController.postNewJob);
+app.get('/job/:id', checkSession, jobController.getJobById);
 
 //GET: /jobs
-app.get('/jobs', jobController.getAll);
+app.get('/jobs', checkSession , jobController.getAll);
+
+//POST: /job
+app.post('/job', checkSession, jobController.postNewJob);
+
+//PUT: /job/:id/apply
+app.post('/job/:id/apply', checkSession,  jobController.applyToJob);
 
 //DELETE:  /job/:id
-app.delete('/job/:id', jobController.findJobByIdAndDelete);
+app.delete('/job/:id', checkSession ,jobController.findJobByIdAndDelete);
 
 /**
  * Student Profile Routes

@@ -2,9 +2,10 @@
  * Created by Tuhin Roy on 9th March, 2019
  */
 
-const {Job} = require('./../models/jobModel');
-const path  = require('path');
+const path = require('path');
 const ObjectID = require('mongodb').ObjectID;
+const { Job } = require('./../models/jobModel');
+const { studentJob } = require('./../models/studentJobModel');
 
 /**
  * New Job GET Request Handler
@@ -12,13 +13,8 @@ const ObjectID = require('mongodb').ObjectID;
  * @param {*} res 
  */
 
-let getNewJob = (req,res) => {
-    if(!!req.session.email){	
-			res.render('job', {pageTitle:'Post Job'});
-	}
-	else{
-		res.redirect('/login');
-	}
+let getNewJob = (req, res) => {
+	res.render('job', { pageTitle: 'Post Job' });
 }
 
 /**
@@ -26,22 +22,71 @@ let getNewJob = (req,res) => {
  * @param {*} req 
  * @param {*} res 
  */
-let getJobById = (req,res) => {
+let getJobById = async (req, res) => {
 	const jobId = req.params.id;
 	const jobList = [];
-	if(!!req.session.email){
-		Job.findById({_id: jobId})
-			.then(job=>{
-				//console.log(job);
-				if(!job) return res.sendStatus(404);
+	let studentJobStatus = 'NOT APPLIED';
+	try {
+		const job = await Job.findById({ _id: jobId });
+		if (!job) return res.sendStatus(404);
+		const jobStudents = await studentJob.findOne({ jobID: jobId });
+		if (!jobStudents) {
+			jobList.push(job);
+			return res.render('jobDetails', { jobList, studentJobStatus });
+		}
+		else {
+			const studentJobObj = jobStudents.students.filter(student => student.email == req.session.email);
+			if (studentJobObj.length == 0) {
+				jobList.push(job);
+				return res.render('jobDetails', { jobList, studentJobStatus });
+			}
+			else {
+				studentJobStatus = studentJobObj[0].status;
 				jobList.push(job); //HBS can't iterate over object!
-				res.render('jobDetails', {jobList});
-			});
+				res.render('jobDetails', { jobList, studentJobStatus });
+			}
+		}
 	}
-	else{
-		res.redirect('/login');
+	catch (e) {
+		throw new Error(e);
 	}
 
+};
+
+/**
+ * Apply to Job
+ * @param {*} req 
+ * @param {*} res 
+ */
+let applyToJob = async (req, res) => {
+	let jobId = req.params.id;
+	let email = req.body.email;
+	let company = req.body.company;
+	let data = await studentJob.findOne({ jobID: jobId });
+	if (!data) {
+		let stuJobObj = new studentJob({
+			jobID: jobId,
+			company: company,
+			students: [{
+				email: email,
+				status: 'APPLIED'
+			}],
+		});
+		stuJobObj.save()
+			.then(data => console.log(data))
+			.catch(console.log);
+
+	}
+	else {
+		let filter = data.students.filter(student => student.email == email);
+		if (filter.length == 0) {
+			let stuJobObj = new studentJob();
+			data.students.push({ email: email, status: 'APPLIED' });
+			stuJobObj = data;
+			await stuJobObj.save();
+		}
+	}
+	res.end();
 };
 
 /**
@@ -49,8 +94,8 @@ let getJobById = (req,res) => {
  * @param {*} req 
  * @param {*} res 
  */
-let postNewJob = (req,res) => {
-  let comp_name = req.body.comp_name;
+let postNewJob = async (req, res) => {
+	let comp_name = req.body.comp_name;
 	let placement_type = req.body.placement_type;
 	let location = req.body.location;
 	let venue = req.body.venue;
@@ -62,23 +107,21 @@ let postNewJob = (req,res) => {
 	let comp_key = comp_name.split(' ');
 	comp_key = comp_key[0];
 
-	jd.mv(path.join(__dirname,`../docs/jd/jd_${comp_key}.doc`), err=> {
-    if (err) return res.status(500).send(err);
-      	console.log('JD uploaded!');
-      });
-    const job = new Job({
-			comp_name, placement_type, location, venue, date, time, eligibility, comp_key
+	jd.mv(path.join(__dirname, `../docs/jd/jd_${comp_key}.doc`), err => {
+		if (err) return res.status(500).send(err);
 	});
-
-
-	return job.save()
-		.then(job => {
-			res.redirect('/dashboard');
-		})
-		.catch(e => {
-			console.log('Error'+e);
+	const job = new Job({
+		comp_name, placement_type, location, venue, date,
+		time, eligibility, comp_key
 	});
-
+	try {
+		await job.save();
+		res.redirect('/dashboard');
+	}
+	catch (e) {
+		console.log(e);
+		throw new Error(e);
+	}
 }
 
 /**
@@ -86,18 +129,9 @@ let postNewJob = (req,res) => {
  * @param {*} req
  * @param {*} res
  */
-let getAll = (req,res) => {
-
-	if(typeof req.session.email === 'undefined'){	
-		res.redirect('/login');
-	}
-	else{
-		Job.find({}).then((jobs) => {
-			res.render('viewJobs', {pageTitle:'Get Jobs',jobs});
-		}).catch((e) => {
-			console.log(e);
-		});
-	}
+let getAll = async (req, res) => {
+		let jobs = await Job.find({});
+		res.render('viewJobs', { pageTitle: 'Get Jobs', jobs });
 }
 
 /**
@@ -105,22 +139,22 @@ let getAll = (req,res) => {
  * @param {*} req 
  * @param {*} res 
  */
-let findJobByIdAndDelete = (req,res) => {
+let findJobByIdAndDelete = async (req, res) => {
 	const jobId = req.params.id;
-	Job.findByIdAndDelete({_id: ObjectID(jobId)})
-		.then(deletedJob=>{
-			//console.log(deletedJob);
-			res.sendStatus(200);
-		})
-		.catch(e=> {
-			res.sendStatus(500);
-		});
+	try {
+		const deletedJob = await Job.findByIdAndDelete({ _id: ObjectID(jobId) });
+		res.sendStatus(200).json(deletedJob);;
+	}
+	catch (e) {
+		res.sendStatus(500);
+	}
 };
 
 module.exports = {
-    getNewJob,
-		postNewJob,
-		getAll,
-		findJobByIdAndDelete,
-		getJobById
+	getNewJob,
+	postNewJob,
+	getAll,
+	findJobByIdAndDelete,
+	getJobById,
+	applyToJob
 }

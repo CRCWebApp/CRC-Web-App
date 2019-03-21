@@ -65,15 +65,38 @@ $(document).ready(function(){
    */
    $('#deleteJob').on('click', function(){
        var jobId=document.getElementById('jobDetailsTable').rows[1].cells[1].innerHTML;
-        $.ajax({
-            type:'DELETE',
+       var choice = confirm("Are you sure to delete the job?");
+       if(choice){
+           $.ajax({
             url:'http://localhost:3000/job/'+jobId,
+            type:'DELETE',
             success: function() {
                 alert('Job was deleted!!');
                 window.location.href = 'http://localhost:3000/jobs'
             }
         })
+       } 
+    });
+
+   /**
+        Apply to Job Button Handler
+   */
+   $('#applyToJob').on('click', function() {
+       var email = document.getElementById('sessionEmail').innerHTML;
+       var jobId= document.getElementById('jobDetailsTable').rows[1].cells[1].innerHTML;
+       var jobCompany = document.getElementById('jobDetailsTable').rows[2].cells[1].innerHTML;
+       $.ajax({
+           url: `http://localhost:3000/job/${jobId}/apply`,
+           type: 'POST',
+           data: {email: email, company : jobCompany},
+           success: function() {
+                alert('You successfully applied for the job!');
+                window.location.href = `http://localhost:3000/job/${jobId}`;
+            }
+        })
    });
+
+
 
    $('#filter').on('click', function() {
         var optionVal = $('#test').val();
@@ -151,7 +174,6 @@ $(document).ready(function(){
         function hideURLbar() {
             window.scrollTo(0, 1);
         }
-
 
         // selection year b/w start year and end year
         function yearCheckerValidator() {

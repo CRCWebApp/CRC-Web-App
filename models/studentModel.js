@@ -1,12 +1,7 @@
 var mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 var StudentSchema = new mongoose.Schema({
-	first_name:{
-		type:String,
-		required:true,
-		trim:true,
-		minLength:1
-	},
+	first_name:{type:String,required:true,trim:true,minLength:1},
 	last_name:{
 		type:String,
 		required:true,
@@ -125,7 +120,7 @@ var StudentSchema = new mongoose.Schema({
 		trim:true,
 		default:'Not set yet',
 		minLength:1
-	}
+	},
 });
 
 

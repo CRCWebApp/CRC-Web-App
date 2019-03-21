@@ -17,7 +17,6 @@
         <ul class="nav navbar-nav navbar-right">
 
     {{#if session.email}}
-    {{session.email}}
 
 		{{#ifEquals type "Student"}}
 
@@ -31,10 +30,10 @@
                     <li><a href="/changeRequest">Request a Change to Admin</a></li>
                  </ul>   
             </li>
-             <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notices<span class="caret"></span></a>
+             <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Jobs<span class="caret"></span></a>
           
                  <ul class="dropdown-menu">
-                    <li><a href="/getJobs">Job</a></li>
+                    <li><a href="/jobs">Job</a></li>
                     <li><a href="getGL">Guest Lecture</a></li>
                  </ul>   
             </li>
@@ -50,7 +49,7 @@
   
             <li><a href="/dashboard">Dashboard</a></li>
             <li><a href="/addStudent">Add Student</a></li>
-            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="/addNotice">Add Notice<span class="caret"></span></a>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="/addNotice">Jobs<span class="caret"></span></a>
           
                  <ul class="dropdown-menu">
                     <li><a href="/job">Post new job</a></li>
