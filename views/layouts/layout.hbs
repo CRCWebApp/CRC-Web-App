@@ -108,7 +108,7 @@
                 var startyear = $('#startyear').val();
                 var endyear = $('#endyear').val();
                 var branch = $('#branch').val();
-                $.post("http://localhost:3000/dashboard",
+                $.post(`${baseURL}/dashboard`,
                     {
                         optionV: optionVal,
                         start: startyear,

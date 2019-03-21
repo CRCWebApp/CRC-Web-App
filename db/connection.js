@@ -7,7 +7,7 @@ mongoose.set('useCreateIndex', true);
 let db = mongoose.connection;
 
 db.on('error', (e)=> {
-    throw new Error('> UNABLE TO CONNECT TO THE MONGODB! CHECK CONNECTION');
+    throw new Error('> UNABLE TO CONNECT TO THE MONGO DATABASE! CHECK CONNECTION');
 });
 
 

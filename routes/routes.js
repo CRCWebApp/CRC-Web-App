@@ -5,118 +5,118 @@
 
 const authController = require('./../controllers/AuthController');
 const homeController = require('./../controllers/HomeController');
-const dashboardController  = require('./../controllers/DashboardController');
+const dashboardController = require('./../controllers/DashboardController');
 const jobController = require('./../controllers/JobController');
 const profileController = require('./../controllers/ProfileController');
 const noticeController = require('./../controllers/NoticeController');
 const registrationController = require('./../controllers/RegistrationController');
 const fileController = require('./../controllers/FIleController');
-const {checkSession} = require('./../middlewares/session');
+const { checkSession } = require('./../middlewares/session');
 
 module.exports = app => {
-/**
- * Root Route
- */
+    /**
+     * Root Route
+     */
 
-//GET: / 
-app.get('/', homeController.getHome); 
+    //GET: / 
+    app.get('/', homeController.getHome);
 
-/**
- * Authentication Routes
- */
+    /**
+     * Authentication Routes
+     */
 
-//GET: /login
-app.get('/login', authController.getLogin);
+    //GET: /login
+    app.get('/login', authController.getLogin);
 
-//POST: /login
-app.post('/login', authController.postLogin);
+    //POST: /login
+    app.post('/login', authController.postLogin);
 
-//GET: /logout
-app.get('/logout', authController.logout);
+    //GET: /logout
+    app.get('/logout', authController.logout);
 
-/**
- * Admin Dashboard Routes
- */
+    /**
+     * Admin Dashboard Routes
+     */
 
-//GET: /dashboard
-app.get('/dashboard', dashboardController.getDashBoard);
+    //GET: /dashboard
+    app.get('/dashboard', dashboardController.getDashBoard);
 
-//POST: /dashboard
-app.post('/dashboard', dashboardController.postDashboard, dashboardController.storeFilteredStudents);
+    //POST: /dashboard
+    app.post('/dashboard', dashboardController.postDashboard, dashboardController.storeFilteredStudents);
 
-/**
- * Student Registration Routes
- */
+    /**
+     * Student Registration Routes
+     */
 
- //GET: /addStudent
- app.get('/addStudent', registrationController.getStudent);
+    //GET: /addStudent
+    app.get('/addStudent', registrationController.getStudent);
 
- //POST: /registration
- app.post('/registration', registrationController.registerStudent);
+    //POST: /registration
+    app.post('/registration', registrationController.registerStudent);
 
-/**
- * Job Routes
- */
+    /**
+     * Job Routes
+     */
 
-//GET :/job
-app.get('/job', checkSession, jobController.getNewJob);
+    //GET :/job
+    app.get('/job', checkSession, jobController.getNewJob);
 
-//GET: /job/:id
-app.get('/job/:id', checkSession, jobController.getJobById);
+    //GET: /job/:id
+    app.get('/job/:id', checkSession, jobController.getJobById);
 
-//GET: /jobs
-app.get('/jobs', checkSession , jobController.getAll);
+    //GET: /jobs
+    app.get('/jobs', checkSession, jobController.getAll);
 
-//GET: /job/:id/applicants
-app.get('/job/:id/applicants', checkSession, jobController.getAllJobApplicants);
+    //GET: /job/:id/applicants
+    app.get('/job/:id/applicants', checkSession, jobController.getAllJobApplicants);
 
-//POST: /job
-app.post('/job', checkSession, jobController.postNewJob);
+    //POST: /job
+    app.post('/job', checkSession, jobController.postNewJob);
 
-//PUT: /job/:id/apply
-app.post('/job/:id/apply', checkSession,  jobController.applyToJob);
+    //PUT: /job/:id/apply
+    app.post('/job/:id/apply', checkSession, jobController.applyToJob);
 
-//DELETE:  /job/:id
-app.delete('/job/:id', checkSession ,jobController.findJobByIdAndDelete);
+    //DELETE:  /job/:id
+    app.delete('/job/:id', checkSession, jobController.findJobByIdAndDelete);
 
-/**
- * Student Profile Routes
- */
+    /**
+     * Student Profile Routes
+     */
 
- //GET: /profile
-app.get('/profile', profileController.getProfile);
+    //GET: /profile
+    app.get('/profile', profileController.getProfile);
 
-/**
- * Notice Routes
- */
-//GET :/notices
-app.get('/notices', noticeController.getAll);
+    /**
+     * Notice Routes
+     */
+    //GET :/notices
+    app.get('/notices', noticeController.getAll);
 
-//GET: /addNotice
-app.get('/addNotice', noticeController.getNotice);
+    //GET: /addNotice
+    app.get('/addNotice', noticeController.getNotice);
 
-//POST: /postNotice
-app.post('/postNotice', noticeController.postNotice);
+    //POST: /postNotice
+    app.post('/postNotice', noticeController.postNotice);
 
 
-/**
- * File Handling Routes
- */
-//GET: /exportFile
+    /**
+     * File Handling Routes
+     */
+    //GET: /exportFile
 
-app.get('/exportFile', fileController.getExportFile);
+    app.get('/exportFile', fileController.getExportFile);
 
-//POST: /exportFile
-app.post('/exportFile', fileController.postExportFile);
+    //POST: /exportFile
+    app.post('/exportFile', fileController.postExportFile);
 
-//GET: /downloadCV/:id
-app.get('/downloadCV/:id', fileController.downloadCV);
+    //GET: /downloadCV/:id
+    app.get('/downloadCV/:id', fileController.downloadCV);
 
-//GET: /downloadJD/:id
-app.get('/downloadJD/:id', fileController.downloadJD);
+    //GET: /downloadJD/:id
+    app.get('/downloadJD/:id', fileController.downloadJD);
 
-//POST: /updateDP
-app.post('updateDP', fileController.updateDP);
+    //POST: /updateDP
+    app.post('updateDP', fileController.updateDP);
 
 }
 
