@@ -1,172 +1,176 @@
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{pageTitle}}</title>
-    <link rel="stylesheet" type="text/css" href="\bower_components\bootstrap\dist\css\bootstrap.css"></li>
-   
+    <link rel="stylesheet" type="text/css" href="\bower_components\bootstrap\dist\css\bootstrap.css">
+    </li>
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
     <link href="https://fonts.googleapis.com/css?family=Concert+One" rel="stylesheet">
-    
+
     <link href="/css/login-style.css" rel="stylesheet" type="text/css" />
-    
+
     <link href="/css/registration-style.css" rel="stylesheet" type="text/css" />
-    
+
     <link href="/css/fontawesome-all.css" rel="stylesheet" />
-    
+
     <!--Course call here -->
     <script type="text/javascript" src="/js/courses_names.js"></script>
     <!--Course call End-->
 
-     <link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+    <link
+        href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
     <!-- /google fonts-->
     <link rel="stylesheet" href="\bower_components\font-awesome\css\font-awesome.min.css">
     <script src="\bower_components\jquery\dist\jquery.min.js"></script>
     <script src="\bower_components\jquery\dist\jquery.js"></script>
-    
+
     <script src="/js/courses_names.js"></script>
     <script src="/js/registration-error.js"></script>
 
     <!-- jobs validation here -->
     <script src="/js/job-error.js"></script>
 
-    
+
     <link rel="stylesheet" href="\css/jquery-ui.css">
-         <script src="\bower_components\jquery-ui\jquery-ui.js"></script>
-     
+    <script src="\bower_components\jquery-ui\jquery-ui.js"></script>
+
     <script src="\bower_components\jquery-validation\dist\jquery.validate.js"></script>
 
-   
+
 
 </head>
+
 <body>
 
-{{> header }}
+    {{> header }}
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-    {{{body}}}
+        {{{body}}}
 
-</div>
-
-
-{{> footer }}
+    </div>
 
 
-
- <script type="text/javascript" src="\bower_components\bootstrap\dist\js\bootstrap.js"></script>
- <script>
-$(document).ready(function(){
-
-   /**
-        Delete Job Button Handler
-   */
-   $('#deleteJob').on('click', function(){
-       var jobId=document.getElementById('jobDetailsTable').rows[1].cells[1].innerHTML;
-       var choice = confirm("Are you sure to delete the job?");
-       if(choice){
-           $.ajax({
-            url:'http://localhost:3000/job/'+jobId,
-            type:'DELETE',
-            success: function() {
-                alert('Job was deleted!!');
-                window.location.href = 'http://localhost:3000/jobs'
-            }
-        })
-       } 
-    });
-
-   /**
-        Apply to Job Button Handler
-   */
-   $('#applyToJob').on('click', function() {
-       var email = document.getElementById('sessionEmail').innerHTML;
-       var jobId= document.getElementById('jobDetailsTable').rows[1].cells[1].innerHTML;
-       var jobCompany = document.getElementById('jobDetailsTable').rows[2].cells[1].innerHTML;
-       $.ajax({
-           url: `http://localhost:3000/job/${jobId}/apply`,
-           type: 'POST',
-           data: {email: email, company : jobCompany},
-           success: function() {
-                alert('You successfully applied for the job!');
-                window.location.href = `http://localhost:3000/job/${jobId}`;
-            }
-        })
-   });
+    {{> footer }}
 
 
 
-   $('#filter').on('click', function() {
-        var optionVal = $('#test').val();
-        var startyear = $('#startyar').val();
-        var endyear = $('#endyear').val();
-        var branch = $('#branch').val();
-     
-        $.post("http://localhost:3000/dashboard",
-            {
-                optionV : optionVal,
-                start : startyear,
-                end : endyear,
-                branch: branch
-               
-            },
-        function(data, status){
-            $('#tbody').empty();
-            var row = " ";
-            for(var i = 1; i <= data.length; i++) {
-                row += "<tr>";
-               
-                    row += '<td>' + i + '</td>'
-                        +'<td>' + data[i-1].first_name + '</td>'
-                        +'<td>' + data[i-1].last_name + '</td>'
-                        +'<td>' + data[i-1].collegeID+ '</td>'
-                        +'<td>' + data[i-1].dob + '</td>'
-                        +'<td>' + data[i-1].phone + '</td>'
-                        +'<td>' + data[i-1].email + '</td>'
-                        +'<td>' + data[i-1].tenthMarks + '</td>'
-                        +'<td>' + data[i-1].twelvthMarks + '</td>'
-                        +'<td>' + data[i-1].btechMarks + '</td>'
-                        +'<td>' + data[i-1].training_company + '</td>'
-                        +'<td>' + data[i-1].training_location + '</td>'
-                        +'<td>' + data[i-1].training_duration + '</td>'
+    <script type="text/javascript" src="\bower_components\bootstrap\dist\js\bootstrap.js"></script>
+    <script>
+        $(document).ready(function () {
+            var baseURL = 'http://localhost:3000';
+            /**
+                 Delete Job Button Handler
+            */
+            $('#deleteJob').on('click', function () {
+                var jobId = document.getElementById('jobDetailsTable').rows[1].cells[1].innerHTML;
+                var choice = confirm("Are you sure to delete the job?");
+                if (choice) {
+                    $.ajax({
+                        url: `${baseURL}/job/${jobId}`,
+                        type: 'DELETE',
+                        success: function () {
+                            alert('Job was deleted!!');
+                            window.location.href = `${baseURL}/jobs`
+                        }
+                    })
+                }
+            });
 
-                        +'<td><a href="/downloadCV/'+data[i-1].collegeID + '""><input type="button" class="btn btn-info" value="View"></a></td>';
-                     
-                     
-            
-                row += "</tr>";
-            }
-            $('#tbody').append(row); 
-        });
-    });
+            /**
+                 Apply to Job Button Handler
+            */
+            $('#applyToJob').on('click', function () {
+                var email = document.getElementById('sessionEmail').innerHTML;
+                var jobId = document.getElementById('jobDetailsTable').rows[1].cells[1].innerHTML;
+                var jobCompany = document.getElementById('jobDetailsTable').rows[2].cells[1].innerHTML;
+                $.ajax({
+                    url: `${baseURL}/job/${jobId}/apply`,
+                    type: 'POST',
+                    data: { email: email, company: jobCompany },
+                    success: function () {
+                        alert('You successfully applied for the job!');
+                        window.location.href = `${baseURL}/job/${jobId}`;
+                    }
+                })
+            });
 
-    $('#export').click(function(){
-        var table = $('#mytable');
-        var data = [];
-    table.find('tr').each(function (rowIndex, r) {
-        var cols = [];
-        $(this).find('th,td').each(function (colIndex, c) {
-            cols.push(c.textContent);
-        });
-        data.push(cols);
-    });
+            $('#checkApplicants').on('click', function () {
+                var jobId = document.getElementById('jobDetailsTable').rows[1].cells[1].innerHTML;
+                window.location.href = `${baseURL}/job/${jobId}/applicants`;
+            });
 
-             $.post("https://crc-server.herokuapp.com/exportFile",
-                {
-                    fetchedData: data
-                },
-                function(data,status){
-                    window.open('/exportFile');
+            $('#filter').on('click', function () {
+                var optionVal = $('#test').val();
+                var startyear = $('#startyear').val();
+                var endyear = $('#endyear').val();
+                var branch = $('#branch').val();
+                $.post("http://localhost:3000/dashboard",
+                    {
+                        optionV: optionVal,
+                        start: startyear,
+                        end: endyear,
+                        branch: branch
+
+                    },
+                    function (data, status) {
+                        $('#tbody').empty();
+                        var row = " ";
+                        for (var i = 1; i <= data.length; i++) {
+                            row += "<tr>";
+
+                            row += '<td>' + i + '</td>'
+                                + '<td>' + data[i - 1].first_name + '</td>'
+                                + '<td>' + data[i - 1].last_name + '</td>'
+                                + '<td>' + data[i - 1].collegeID + '</td>'
+                                + '<td>' + data[i - 1].dob + '</td>'
+                                + '<td>' + data[i - 1].phone + '</td>'
+                                + '<td>' + data[i - 1].email + '</td>'
+                                + '<td>' + data[i - 1].tenthMarks + '</td>'
+                                + '<td>' + data[i - 1].twelvthMarks + '</td>'
+                                + '<td>' + data[i - 1].btechMarks + '</td>'
+                                + '<td>' + data[i - 1].training_company + '</td>'
+                                + '<td>' + data[i - 1].training_location + '</td>'
+                                + '<td>' + data[i - 1].training_duration + '</td>'
+
+                                + '<td><a href="/downloadCV/' + data[i - 1].collegeID + '""><input type="button" class="btn btn-info" value="View"></a></td>';
+
+
+
+                            row += "</tr>";
+                        }
+                        $('#tbody').append(row);
+                    });
+            });
+
+            $('#export').click(function () {
+                var table = $('#mytable');
+                var data = [];
+                table.find('tr').each(function (rowIndex, r) {
+                    var cols = [];
+                    $(this).find('th,td').each(function (colIndex, c) {
+                        cols.push(c.textContent);
+                    });
+                    data.push(cols);
                 });
-        
-    });
-});
 
-   
- </script>
-  <script type="application/x-javascript">
+                $.post("https://crc-server.herokuapp.com/exportFile",
+                    {
+                        fetchedData: data
+                    },
+                    function (data, status) {
+                        window.open('/exportFile');
+                    });
+
+            });
+        });
+
+
+    </script>
+    <script type="application/x-javascript">
         addEventListener("load", function () {
             setTimeout(hideURLbar, 0);
         }, false);
@@ -190,12 +194,13 @@ $(document).ready(function(){
             }
         }
     </script>
- 
- 
-  <script src="\bower_components\jquery-validation\dist\jquery.validate.min.js"></script>
-  <script src="\bower_components\jquery-validation\dist\additional-methods.min.js"></script>
-  
- 
+
+
+    <script src="\bower_components\jquery-validation\dist\jquery.validate.min.js"></script>
+    <script src="\bower_components\jquery-validation\dist\additional-methods.min.js"></script>
+
+
 
 </body>
+
 </html>

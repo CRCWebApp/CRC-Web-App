@@ -1,0 +1,37 @@
+<br />
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="well">
+        {{#if applicants}}
+        <div class="table-responsive">
+          <table class="table" id="mytable">
+            <thead>
+              <tr>
+                <th scope="col">S.No.</th>
+                <th scope="col">Email</th>
+                <th scope="col">Status</th>
+
+              </tr>
+            </thead>
+            <div id="div1">
+              <tbody id="tbody" name="tbody">
+
+                {{#each applicants}}
+                <tr>
+                  <td>{{inc @index}}</td>
+                  <td>{{email}}</td>
+                  <td>{{status}}</td>
+                </tr>
+                {{/each}}
+                {{else}}
+                <td>No applicants to display!</td>
+                {{/if}}
+              </tbody>
+            </div>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

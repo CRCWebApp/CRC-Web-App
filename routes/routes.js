@@ -67,6 +67,9 @@ app.get('/job/:id', checkSession, jobController.getJobById);
 //GET: /jobs
 app.get('/jobs', checkSession , jobController.getAll);
 
+//GET: /job/:id/applicants
+app.get('/job/:id/applicants', checkSession, jobController.getAllJobApplicants);
+
 //POST: /job
 app.post('/job', checkSession, jobController.postNewJob);
 

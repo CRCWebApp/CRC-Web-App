@@ -1,5 +1,5 @@
 /**
- * Created by Tuhin Roy on 9th March, 2019
+ * Updated by Tuhin Roy on 21st March, 2019
  */
 
 const path = require('path');
@@ -150,11 +150,24 @@ let findJobByIdAndDelete = async (req, res) => {
 	}
 };
 
+/**
+ * Get All Job Applicants
+ * @param {*} req 
+ * @param {*} res 
+ */
+let getAllJobApplicants = async (req,res) => {
+	const jobID = req.params.id;
+	let jobResult = await studentJob.findOne({jobID: jobID});
+	let applicants = jobResult.students;
+	res.render('viewApplicants', {applicants: applicants});
+};
+
 module.exports = {
 	getNewJob,
 	postNewJob,
 	getAll,
 	findJobByIdAndDelete,
 	getJobById,
-	applyToJob
+	applyToJob,
+	getAllJobApplicants
 }
