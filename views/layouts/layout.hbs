@@ -98,10 +98,34 @@
                 })
             });
 
+            /**
+                Check Applicants Button Handler
+            */
             $('#checkApplicants').on('click', function () {
                 var jobId = document.getElementById('jobDetailsTable').rows[1].cells[1].innerHTML;
                 window.location.href = `${baseURL}/job/${jobId}/applicants`;
             });
+
+            /**
+                Job Status Change Handler
+            */
+            
+            $('.changeJobStatus').on('change', function () {
+                var status = this.value;
+                var email = $(this).parent().parent().children().eq(1).text();   
+                var jobID = window.location.pathname.split('/')[2];
+                $.ajax({
+                    url:`${baseURL}/job/${jobID}/changeStatus`,
+                    type:'PUT',
+                    data: { email: email, status: status },
+                    success: function(){
+                        alert('Job status was changed!');
+                        window.location.reload();
+                    }
+                })
+            });
+
+
 
             $('#filter').on('click', function () {
                 var optionVal = $('#test').val();
@@ -113,7 +137,7 @@
                         optionV: optionVal,
                         start: startyear,
                         end: endyear,
-                        branch: branch
+                        branch: branchthis
 
                     },
                     function (data, status) {

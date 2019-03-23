@@ -130,8 +130,8 @@ let postNewJob = async (req, res) => {
  * @param {*} res
  */
 let getAll = async (req, res) => {
-		let jobs = await Job.find({});
-		res.render('viewJobs', { pageTitle: 'Get Jobs', jobs });
+	let jobs = await Job.find({});
+	res.render('viewJobs', { pageTitle: 'Get Jobs', jobs });
 }
 
 /**
@@ -155,12 +155,31 @@ let findJobByIdAndDelete = async (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-let getAllJobApplicants = async (req,res) => {
+let getAllJobApplicants = async (req, res) => {
 	const jobID = req.params.id;
-	let jobResult = await studentJob.findOne({jobID: jobID});
+	let jobResult = await studentJob.findOne({ jobID: jobID });
 	let applicants = jobResult.students;
-	res.render('viewApplicants', {applicants: applicants});
+	res.render('viewApplicants', { applicants: applicants });
 };
+
+let changeJobStatus = async (req, res) => {
+	const email = req.body.email;
+	const status = req.body.status;
+	const jobID = req.params.id;
+
+	let jobResult = await studentJob.findOne({ jobID: jobID });
+	if (!jobResult) return console.log('Job was not found!');
+	for (let i in jobResult.students) {
+		let student = jobResult.students[i];
+		if (student.email === email) {
+			student.status = status;
+		}
+	}
+	let newJob = new studentJob();
+	newJob = jobResult;
+	await newJob.save();
+	res.end();
+}
 
 module.exports = {
 	getNewJob,
@@ -169,5 +188,6 @@ module.exports = {
 	findJobByIdAndDelete,
 	getJobById,
 	applyToJob,
-	getAllJobApplicants
+	getAllJobApplicants,
+	changeJobStatus
 }

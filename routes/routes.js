@@ -76,6 +76,9 @@ module.exports = app => {
     //PUT: /job/:id/apply
     app.post('/job/:id/apply', checkSession, jobController.applyToJob);
 
+    //PUT: /job/:id/changeStatus
+    app.put('/job/:id/changeStatus', checkSession, jobController.changeJobStatus);
+
     //DELETE:  /job/:id
     app.delete('/job/:id', checkSession, jobController.findJobByIdAndDelete);
 
